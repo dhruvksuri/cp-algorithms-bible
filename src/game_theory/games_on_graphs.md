@@ -66,6 +66,8 @@ vector<int> degree;
 void dfs(int v) {
     visited[v] = true;
     for (int u : adj_rev[v]) {
+        // you will decide, the state of U which is parent of V
+        // If state can't be decided then continue else further dfs
         if (!visited[u]) {
             if (losing[v])
                 winning[u] = true;

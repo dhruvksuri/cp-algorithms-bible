@@ -66,15 +66,25 @@ vector<int> degree;
 void dfs(int v) {
     visited[v] = true;
     for (int u : adj_rev[v]) {
-        // you will decide, the state of U which is parent of V
-        // If state can't be decided then continue else further dfs
+        /**
+          1. you will decide, the state of U which is parent of V
+          2. If state can't be decided then continue else further dfs
+        */
         if (!visited[u]) {
+            /**
+              if v is losing vertec?
+                  yes - then u is winning vertex
+                  no - then it can be winning or undefined vertex
+                      a. if winning & if there is only one path to it then parent is losing vertex
+                      b. if undefined then skip it 
+            */ 
             if (losing[v])
                 winning[u] = true;
             else if (--degree[u] == 0)
                 losing[u] = true;
             else
-                continue;
+                continue;  
+            // do dfs only if parent state is determined
             dfs(u);
         }
     }

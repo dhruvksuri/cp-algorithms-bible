@@ -69,16 +69,18 @@ public class AhoCorasick {
             }
             v = transitions[v][c];
         }
-        // escape is leaf node
+        // escape is to identify leaf node
         escape[v] = v;
         return v;
     }
 
     public void buildLinks() {
+        // queue for BFS
         int[] q = new int[MAX_STATES];
 
         //  escape[0] = 0
 
+        // BFS traversal from root
         for (int s = 0, t = 1; s < t;) {
             int v = q[s++];
             
@@ -90,6 +92,7 @@ public class AhoCorasick {
                 escape[v] = escape[u];
             }
             for (int c = 0; c < ALPHABET_SIZE; c++) {
+                // if state exist then add suffix link
                 if (transitions[v][c] != 0) {
                     
                     // we are storing transition node below that is used by s in next iteration

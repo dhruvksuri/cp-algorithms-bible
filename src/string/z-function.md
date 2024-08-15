@@ -46,8 +46,10 @@ For the pattern “AAABAAA”, lps[] is [0, 1, 2, 0, 1, 2, 3]
         int[] p = new int[s.length()];
         int k = 0;
         for (int i = 1; i < s.length(); i++) {
-            while (k > 0 && s.charAt(k) != s.charAt(i)) k = p[k - 1];
-            if (s.charAt(k) == s.charAt(i))
+            while (k > 0 && s.charAt(k) != s.charAt(i)) {
+		k = p[k - 1];
+            }
+	    if (s.charAt(k) == s.charAt(i))
                 ++k;
             p[i] = k;
         }

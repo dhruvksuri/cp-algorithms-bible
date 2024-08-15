@@ -3,6 +3,72 @@ tags:
   - Translated
 e_maxx_link: z_function
 ---
+# KMP and its calculation
+> The KMP matching algorithm uses degenerating property (pattern having the same sub-patterns appearing more than once in the pattern) of the pattern and improves the worst-case complexity to O(n+m). 
+
+The basic idea behind KMP’s algorithm is: whenever we detect a mismatch (after some matches), we already know some of the characters in the text of the next window. We take advantage of this information to avoid matching the characters that we know will anyway match. 
+
+> Matching Overview
+
+txt = “AAAAABAAABA” 
+pat = “AAAA”
+We compare first window of txt with pat
+
+txt = “AAAAABAAABA” 
+pat = “AAAA”  [Initial position]
+We find a match. This is same as Naive String Matching.
+
+In the next step, we compare next window of txt with pat.
+
+txt = “AAAAABAAABA” 
+pat =  “AAAA” [Pattern shifted one position]
+
+This is where KMP does optimization over Naive. In this second window, we only compare fourth A of pattern
+with fourth character of current window of text to decide whether current window matches or not. Since we know 
+first three characters will anyway match, we skipped matching first three characters. 
+
+```cpp
+Examples of lps[] construction:
+
+For the pattern “AAAA”, lps[] is [0, 1, 2, 3]
+
+For the pattern “ABCDE”, lps[] is [0, 0, 0, 0, 0]
+
+For the pattern “AABAACAABAA”, lps[] is [0, 1, 0, 1, 2, 0, 1, 2, 3, 4, 5]
+
+For the pattern “AAACAAAAAC”, lps[] is [0, 1, 2, 0, 1, 2, 3, 3, 3, 4] 
+
+For the pattern “AAABAAA”, lps[] is [0, 1, 2, 0, 1, 2, 3]
+```
+
+```cpp
+ public static int[] prefixFunction(String s) {
+        int[] p = new int[s.length()];
+        int k = 0;
+        for (int i = 1; i < s.length(); i++) {
+            while (k > 0 && s.charAt(k) != s.charAt(i)) k = p[k - 1];
+            if (s.charAt(k) == s.charAt(i))
+                ++k;
+            p[i] = k;
+        }
+        return p;
+    }
+
+    public static int findSubstring(String haystack, String needle) {
+        int m = needle.length();
+        if (m == 0)
+            return 0;
+        int[] p = prefixFunction(needle);
+        for (int i = 0, k = 0; i < haystack.length(); i++) {
+            while (k > 0 && needle.charAt(k) != haystack.charAt(i)) k = p[k - 1];
+            if (needle.charAt(k) == haystack.charAt(i))
+                ++k;
+            if (k == m)
+                return i + 1 - m;
+        }
+        return -1;
+    }
+```
 
 # Z-function and its calculation
 

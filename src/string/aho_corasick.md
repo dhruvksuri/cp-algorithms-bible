@@ -69,21 +69,24 @@ public class AhoCorasick {
             }
             v = transitions[v][c];
         }
+        // escape is leaf node
         escape[v] = v;
         return v;
     }
 
     public void buildLinks() {
         int[] q = new int[MAX_STATES];
-        
+
+        //  escape[0] = 0
+
         for (int s = 0, t = 1; s < t;) {
             int v = q[s++];
             
             // u -> v ...... u is parent of v
             int u = sufflink[v];
             
-            // Node is broken but can we reach via Parent by skipping prefix
             if (escape[v] == 0) {
+                // v is not leaf node
                 escape[v] = escape[u];
             }
             for (int c = 0; c < ALPHABET_SIZE; c++) {

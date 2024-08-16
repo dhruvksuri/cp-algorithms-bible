@@ -6,6 +6,7 @@ e_maxx_link: suffix_automata
 
 # Suffix Automaton
 
+> The Suffix Automaton is a directed acyclic word graph (DAWG), such that each path in the graph traces out a distinct substring of the original string.
 A **suffix automaton** is a powerful data structure that allows solving many string-related problems. 
 
 For example, you can search for all occurrences of one string in another, or count the amount of different substrings of a given string.

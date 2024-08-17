@@ -3,6 +3,13 @@ tags:
   - Translated
 e_maxx_link: aho_corasick
 ---
+> https://medium.com/@balajisukumaran96/the-essence-of-aho-corasick-algorithm-4056dd742842
+
+> During the search phase, the algorithm traverses the trie according to the characters of the text. When a character doesn’t match:
+
+>  The algorithm follows the suffix link to find the next best potential match, rather than starting from the beginning.
+
+>  If a full pattern is matched, it records the match, and then uses the output link to check for other potential matches that might also end at this position in the text.
 
 # Aho-Corasick algorithm (dictionary)
 

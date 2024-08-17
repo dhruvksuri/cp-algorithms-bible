@@ -4,6 +4,20 @@ tags:
 e_maxx_link: suffix_automata
 ---
 
+```cpp
+Let’s see a very basic problem.
+
+Count the number of distinct substrings that occur in a given string.
+
+You can solve this problem in two ways.
+
+The number of different substrings is equal to the number of different possible paths we can take in the Suffix Automata.
+The number of distinct paths can be quite high ( O(n2) ), but we can use DP to save the number of paths possible from this state,
+and thus get the answer in O(n).
+Using Suffix Links. Each node accepts substrings from minlen to len, i.e. len-minlen+1 substrings, and each of these is unique.
+
+```
+
 # Suffix Automaton
 
 > The Suffix Automaton is a directed acyclic word graph (DAWG), such that each path in the graph traces out a distinct substring of the original string.

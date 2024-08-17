@@ -80,12 +80,9 @@ public class SuffixArray2 {
 
   Kasai's algorithm is pretty easy and works in O(n).
 
-    Let's look at the two continuous suffixes in the suffix array. Let their indexes in suffix array be i1 and i1 + 1. If their lcp > 0, then if we delete first letter from both of them. We can easily see that new strings will have the same relative order. Also we can see that lcp of new strings will be exactly lcp - 1.
-    
-    Let's now look at the string wich we have got from the i suffix by deleting its first character. Obviously it is some suffix of the string too. Let its index be i2. Let's look at the lcp of suffixes i2 and i2 + 1. We can see that it's lcp will be at least already mentioned lcp - 1. This is associated with certain properties of lcp array, in particular, that lcp(i, j) = min(lcpi, lcpi + 1, ..., lcpj - 1).
-    
-    And finally let's make the algorithm based on the mentioned above. We will need an additional array rank[n], wich will contain the index in the suffix array of the suffix starting in index i. Firstly we should calculate the lcp of the suffix with index rank[0]. Then let's iterate through all suffixes in order in which we meet them in the string and calculate lcp[rank[i]] in naive way, BUT starting it from lcp[rank[i - 1]] - 1. Easy to see that now we have O(n) algorithm because on the each step our lcp decreasing not more than by 1 (except the case when rank[i] = n - 1).
-    
+  In this article, kasai’s Algorithm is discussed. The algorithm constructs LCP array from suffix array and input text in O(n) time. The idea is based on below fact:
+  Let lcp of suffix beginning at txt[i[ be k. If k is greater than 0, then lcp for suffix beginning at txt[i+1] will be at-least k-1. The reason is, relative order of characters remain same. If we delete the first character from both suffixes, we know that at least k characters will match. For example for substring “ana”, lcp is 3, so for string “na” lcp will be at-least 2.
+   
     The string S = "banana" has the following Suffix Array:
 
     Suffix Array (sa):          [5, 3, 1, 0, 4, 2]
@@ -96,35 +93,38 @@ public class SuffixArray2 {
 
     LCP Array (lcp):  [0, 0, 0, 0, 0, 0]
     
-    For i = 0:  sa[0] = 5, inv[5] = 0, k = 0.
-        Update lcp[0] = 0.
+    For i = 0:  inv[0] = 3, sa[3+1] = na, k = 0.
+        Compare suffixes "banana" (starting at index 3) and "na" (starting at index 4). No common prefix was found.
+        Update lcp[3] = 0.
 
     For i = 1:
-        sa[1] = 3, inv[3] = 1, k = 0.
-        Compare suffixes "na" (starting at index 3) and "ana" (starting at index 1). No common prefix was found.
-        Update lcp[1] = 0.
-
-    For i = 2:
-        sa[2] = 1, inv[1] = 2, k = 0.
-        Compare suffixes "ana" (starting at index 1) and "banana" (starting at index 0). No common prefix was found.
+        inv[1] = 2, sa[2+1] = banana, k = 0
+        Compare suffixes "anana" (starting at index 2) and "banana" (starting at index 3). No common prefix was found.
         Update lcp[2] = 0.
 
-    For i = 3:
-        sa[3] = 0, inv[0] = 3, k = 0.
-        Compare suffixes "banana" (starting at index 0) and "nana" (starting at index 4). A common prefix of length 1 was found ("n").
-        Update lcp[3] = 1.
-    
-    For i = 4:
-        sa[4] = 4, inv[4] = 4, k = 0.
-        Compare suffixes "nana" (starting at index 4) and "a" (starting at index 2). No common prefix was found.
-        Update lcp[4] = 0.
-
-    For i = 5:
-        sa[5] = 2, inv[2] = 5, k = 0.
-        Compare suffixes "a" (starting at index 2) and "banana" (starting at index 5). No common prefix was found.
+    For i = 2:
+        inv[2] = 5, , k = 0
         Update lcp[5] = 0.
 
-    The final LCP array is [0, 0, 0, 1, 0, 0].
+    For i = 3:
+        inv[3] = 1, sa[1+1] = anana, k(start)=0 & k = 3.
+        Compare suffixes "ana" (starting at index 0) and "anana". A common prefix of length 1 was found ("n").
+        Update lcp[1] = 3.
+        k-1
+    
+    For i = 4:
+        inv[4] = 4 , sa[4+1] = nana, k(start)=2
+        Compare suffixes "na" (starting at index 4) and "nana". No common prefix was found.
+        Update lcp[4] = 2.
+         k-1
+
+    For i = 5:
+        inv[5] = 0, sa[0+1] = ana, k(start)=1
+        Compare suffixes "a" (starting at index 2) and "ana". No common prefix was found.
+        Update lcp[0] = 1.
+
+    The final LCP array is [1, 3, 0, 0, 2, 0].
+
     */
 
     // Use Kasai algorithm to build LCP array

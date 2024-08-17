@@ -11,6 +11,9 @@ e_maxx_link: aho_corasick
 
 >  If a full pattern is matched, it records the match, and then uses the output link to check for other potential matches that might also end at this position in the text.
 
+
+![image](https://github.com/user-attachments/assets/3aa20f6d-00ae-42f0-9661-63b678ae8da7)
+
 # Aho-Corasick algorithm (dictionary)
 
 The Aho-Corasick algorithm allows us to quickly search for multiple patterns in a text.

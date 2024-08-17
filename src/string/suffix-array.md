@@ -15,8 +15,13 @@ e_maxx_link: suffix_array
 public class SuffixArray2 {
     // suffix array in O(n*log^2(n))
     public static int[] suffixArray(CharSequence s) {
+        // abaab
         int n = s.length();
+
+        // [0, 1, 2, 3, 4]
         Integer[] sa = IntStream.range(0, n).boxed().toArray(Integer[] ::new);
+
+        // [97, 98, 97, 97, 98]
         int[] rank = s.chars().toArray();
 
         for (int len = 1; len < n; len *= 2) {
@@ -25,13 +30,16 @@ public class SuffixArray2 {
             for (int i = 0; i < n; i++) {
                 rank2[i] = ((long) rank[i] << 32) + (i + len < n ? rank[i + len] + 1 : 0);
             }
-            
+
+            // sa -> [2, 0, 3, 4, 1]
             Arrays.sort(sa, Comparator.comparingLong(a -> rank2[a]));
 
             for (int i = 0; i < n; i++) {
                 rank[sa[i]] = i > 0 && rank2[sa[i - 1]] == rank2[sa[i]] ? rank[sa[i - 1]] : i;
             }
+            rank  -> [1, 4, 0, 1, 3]
         }
+        // [2, 3, 0, 4, 1]
         return Arrays.stream(sa).mapToInt(Integer::intValue).toArray();
     }
 

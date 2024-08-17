@@ -3,6 +3,23 @@ tags:
   - Translated
 e_maxx_link: expressions_parsing
 ---
+> we assume that all operators are **binary** (i.e. they take two arguments), and all are **left-associative** (if the priorities are equal, they get executed from left to right).
+
+> expression can be written in reverse Polish notation
+> We will set up two stacks: one for numbers, and one for operators and parentheses.
+
+> For the second stack we will maintain the condition that all operations are ordered by strict descending priority.
+
+> We will iterate over the characters of the expression from left to right.
+
+> If the current character is a digit, then we put the value of this number on the stack.
+
+> If the current character is an opening parenthesis, then we put it on the stack.
+If the current character is a closing parenthesis, the we execute all operators on the stack until we reach the opening bracket (in other words we perform all operations inside the parenthesis).
+
+> Finally if the current character is an operator, then while the top of the stack has an operator with the same or higher priority, we will execute this operation, and put the new operation on the stack.
+
+> You can notice, that before an unary operator, there always is another operator or an opening parenthesis, or nothing at all (if it is at the very beginning of the expression). 
 
 # Expression parsing
 
@@ -217,18 +234,18 @@ int evaluate(string& s) {
         
         if (s[i] == '(') {
             op.push('(');
-            may_be_unary = true;
+            may_be_unary = true;           // possibility for unary after (
         } else if (s[i] == ')') {
             while (op.top() != '(') {
                 process_op(st, op.top());
                 op.pop();
             }
             op.pop();
-            may_be_unary = false;
+            may_be_unary = false;          // No possibility for unary after )
         } else if (is_op(s[i])) {
             char cur_op = s[i];
             if (may_be_unary && is_unary(cur_op))
-                cur_op = -cur_op;
+                cur_op = -cur_op;        // make unary < 0
             while (!op.empty() && (
                     (cur_op >= 0 && priority(op.top()) >= priority(cur_op)) ||
                     (cur_op < 0 && priority(op.top()) > priority(cur_op))
@@ -237,14 +254,14 @@ int evaluate(string& s) {
                 op.pop();
             }
             op.push(cur_op);
-            may_be_unary = true;
+            may_be_unary = true;        // possibility for unary after operator i.e. -- or ++
         } else {
             int number = 0;
             while (i < (int)s.size() && isalnum(s[i]))
                 number = number * 10 + s[i++] - '0';
             --i;
-            st.push(number);
-            may_be_unary = false;
+            st.push(number);    
+            may_be_unary = false;      // No possibility for unary after number
         }
     }
 

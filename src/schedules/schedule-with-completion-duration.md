@@ -4,9 +4,13 @@ tags:
 e_maxx_link: schedule_with_completion_duration
 ---
 
+Problem Statement: You are given a set of N jobs where each job comes with a deadline and profit. The profit can only be earned upon completing the job within its deadline. Find the number of jobs done and the maximum profit that can be obtained. Each job takes a single unit of time and only one job can be performed at a time.
+
 ![image](https://github.com/user-attachments/assets/54cca4ac-ffa2-4c21-8b0a-15d8d124a454)
 
-
+> Approach:  The strategy to maximize profit should be to pick up jobs that offer higher profits.
+> Now say if a job has a deadline of 4 we can perform it anytime between day 1-4, but it is preferable to perform the job on its last day.
+> This leaves enough empty slots on the previous days to perform other jobs.
 
 ```cpp
 public class JobScheduling {

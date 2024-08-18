@@ -4,6 +4,77 @@ tags:
 e_maxx_link: schedule_with_completion_duration
 ---
 
+Consider the following tasks with their deadlines and profits. Schedule the tasks in such a way that they produce maximum profit after being executed −
+
+![image](https://github.com/user-attachments/assets/155ba393-c703-40c0-b0d5-9228974083b8)
+
+![image](https://github.com/user-attachments/assets/227c6bd7-614f-43b3-9a95-ecc6390d55cd)
+![image](https://github.com/user-attachments/assets/ea22d374-878f-4fcd-a560-950eb4b1f584)
+
+
+```cpp
+public class Job {
+   // Each job has a unique-id,profit and deadline
+   char id;
+   int deadline, profit;
+   // Constructors
+   public Job() {}
+   public Job(char id, int deadline, int profit) {
+      this.id = id;
+      this.deadline = deadline;
+      this.profit = profit;
+   } 
+   // Function to schedule the jobs take 2 arguments
+   // arraylist and no of jobs to schedule
+   void printJobScheduling(ArrayList<Job> arr, int t) {
+      // Length of array
+      int n = arr.size(); 
+      // Sort all jobs according to decreasing order of
+      // profit
+      Collections.sort(arr,(a, b) -> b.profit - a.profit);   
+
+      // To keep track of free time slots
+      boolean result[] = new boolean[t];
+
+      // To store result (Sequence of jobs)
+      char job[] = new char[t]; 
+
+      // Iterate through all given jobs
+      for (int i = 0; i < n; i++) {     
+         // Find a free slot for this job (Note that we
+    
+         // start from the last possible slot)  - MIMP
+         for (int j = Math.min(t - 1, arr.get(i).deadline - 1); j >= 0; j--) {     
+            // Free slot found
+            if (result[j] == false) {
+               result[j] = true;
+               job[j] = arr.get(i).id;
+               break;
+            }
+         }
+      }
+      // Print the sequence
+      for (char jb : job)
+      System.out.print(jb + " ");
+      System.out.println();
+   }
+   // Driver code
+   public static void main(String args[]) {
+      ArrayList<Job> arr = new ArrayList<Job>();
+      arr.add(new Job('a', 2, 100));
+      arr.add(new Job('b', 2, 20));
+      arr.add(new Job('c', 1, 40));
+      arr.add(new Job('d', 3, 35));
+      arr.add(new Job('e', 1, 25));     
+      // Function call
+      System.out.println("Following is maximum profit sequence of Jobs: ");
+      Job job = new Job();     
+      // Calling function
+      job.printJobScheduling(arr, 3);
+   }
+}
+```
+
 # Optimal schedule of jobs given their deadlines and durations
 
 Suppose, we have a set of jobs, and we are aware of every job’s deadline and its duration. The execution of a job cannot be interrupted prior to its ending. It is required to create such a schedule to accomplish the biggest number of jobs.

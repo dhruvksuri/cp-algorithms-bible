@@ -4,6 +4,7 @@ tags:
 e_maxx_link: joseph_problem
 ---
 
+> https://dev.to/vampirepapi/understanding-the-josephus-problem-a-comprehensive-guide-5b6m
 # Josephus Problem
 
 ## Statement

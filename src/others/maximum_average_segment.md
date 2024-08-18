@@ -141,6 +141,124 @@ The problem described in this article is naturally generalized to large dimensio
 Using the solution for the one-dimensional case, it is easy to obtain a solution in $O(n^3)$ for the two-dimensions case:
 we iterate over all possible values of $l_1$ and $r_1$, and calculate the sums from $l_1$ to $r_1$ in each row of the matrix. Now we have the one-dimensional problem of finding the indices $l_2$ and $r_2$ in this array, which can already be solved in linear time.
 
+```cpp
+public class MaxSubmatrixSum {
+
+	// Function to find maximum continuous
+	// maximum sum in the array
+	static int kadane(List<Integer> v) {
+
+		// Stores current and maximum sum
+		int currSum = 0;
+		int maxSum = Integer.MIN_VALUE;
+
+		// Traverse the array v
+		for (int i = 0; i < (int) v.size(); i++) {
+
+			// Add the value of the
+			// current element
+			currSum += v.get(i);
+
+			// Update the maximum sum
+			if (currSum > maxSum) {
+				maxSum = currSum;
+			}
+
+			if (currSum < 0) {
+				currSum = 0;
+			}
+		}
+
+		// Return the maximum sum
+		return maxSum;
+	}
+
+	// Function to find the maximum
+	// submatrix sum
+	static void maxSubmatrixSum(int[][] A) {
+		// Store the rows and columns
+		// of the matrix
+		int r = A.length;
+		int c = A[0].length;
+
+		// Create an auxiliary matrix
+		int[][] prefix = new int[r][c];
+
+		// Traverse the matrix, prefix
+		// and initialize it will all 0s
+		for (int i = 0; i < r; i++) {
+			Arrays.fill(prefix[i], 0);
+		}
+
+		// Calculate prefix sum of all
+		// rows of matrix A[][] and
+		// store in matrix prefix[]
+		for (int i = 0; i < r; i++) {
+
+			for (int j = 0; j < c; j++) {
+
+				// Update the prefix[][]
+				if (j == 0)
+					prefix[i][j] = A[i][j];
+				else
+					prefix[i][j] = A[i][j] + prefix[i][j - 1];
+			}
+		}
+
+		// Store the maximum submatrix sum
+		int maxSum = Integer.MIN_VALUE;
+
+		// Iterate for starting column
+		for (int r1 = 0; r1 < c; r1++) {
+
+			// Iterate for last column
+			for (int r2 = r1; r2 < c; r2++) {
+
+				// To store current array
+				// elements
+				List<Integer> v = new ArrayList<Integer>();
+
+				// Traverse every row
+				for (int l1l2 = 0; l1l2 < r; l1l2++) {
+
+					// Store the sum of the
+					// kth row
+					int el = 0;
+
+					// Update the prefix
+					// sum
+					if (r1 == 0)
+						el = prefix[l1l2][r2];
+					else
+						el = prefix[l1l2][r2] - prefix[l1l2][r1 - 1];
+
+					// Push it in a vector
+					v.add(el);
+				}
+
+				// MIMP - Start & end index of v gives l1 -----> l2
+				
+				// Update the maximum
+				// overall sum
+				maxSum = Math.max(maxSum, kadane(v));
+			}
+		}
+
+		// Print the answer
+		System.out.print(maxSum + "\n");
+	}
+
+	// Driver Code
+	public static void main(String[] args) {
+		int[][] matrix = { { 0, -2, -7, 0 }, { 9, 2, -6, 2 }, { -4, 1, -4, 1 }, { -1, 8, 0, -2 } };
+
+		// Function Call
+		maxSubmatrixSum(matrix);
+	}
+}
+
+```
+
 **Faster** algorithms for solving this problem are known, but they are not much faster than $O(n^3)$, and are very complex (so complex that many of them are inferior to the trivial algorithm for all reasonable constraints by the hidden constant). Currently, the best known algorithm works in $O\left(n^3 \frac{ \log^3 \log n }{ \log^2 n} \right)$ time (T. Chan 2007 "More algorithms for all-pairs shortest paths in weighted graphs")
 
 This algorithm by Chan, as well as many other results in this area, actually describe **fast matrix multiplication** (where matrix multiplication means modified multiplication: minimum is used instead of addition, and addition is used instead of multiplication). The problem of finding the submatrix with the largest sum can be reduced to the problem of finding the shortest paths between all pairs of vertices, and this problem, in turn, can be reduced to such a multiplication of matrices.

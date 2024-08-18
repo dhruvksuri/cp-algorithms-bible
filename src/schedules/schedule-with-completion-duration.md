@@ -4,74 +4,105 @@ tags:
 e_maxx_link: schedule_with_completion_duration
 ---
 
-Consider the following tasks with their deadlines and profits. Schedule the tasks in such a way that they produce maximum profit after being executed −
+![image](https://github.com/user-attachments/assets/54cca4ac-ffa2-4c21-8b0a-15d8d124a454)
 
-![image](https://github.com/user-attachments/assets/155ba393-c703-40c0-b0d5-9228974083b8)
-
-![image](https://github.com/user-attachments/assets/227c6bd7-614f-43b3-9a95-ecc6390d55cd)
-![image](https://github.com/user-attachments/assets/ea22d374-878f-4fcd-a560-950eb4b1f584)
 
 
 ```cpp
-public class Job {
-   // Each job has a unique-id,profit and deadline
-   char id;
-   int deadline, profit;
-   // Constructors
-   public Job() {}
-   public Job(char id, int deadline, int profit) {
-      this.id = id;
-      this.deadline = deadline;
-      this.profit = profit;
-   } 
-   // Function to schedule the jobs take 2 arguments
-   // arraylist and no of jobs to schedule
-   void printJobScheduling(ArrayList<Job> arr, int t) {
-      // Length of array
-      int n = arr.size(); 
-      // Sort all jobs according to decreasing order of
-      // profit
-      Collections.sort(arr,(a, b) -> b.profit - a.profit);   
+public class JobScheduling {
 
-      // To keep track of free time slots
-      boolean result[] = new boolean[t];
-
-      // To store result (Sequence of jobs)
-      char job[] = new char[t]; 
-
-      // Iterate through all given jobs
-      for (int i = 0; i < n; i++) {     
-         // Find a free slot for this job (Note that we
-    
-         // start from the last possible slot)  - MIMP
-         for (int j = Math.min(t - 1, arr.get(i).deadline - 1); j >= 0; j--) {     
-            // Free slot found
-            if (result[j] == false) {
-               result[j] = true;
-               job[j] = arr.get(i).id;
-               break;
+	 // a class to represent job
+    static class Job {
+        char job_id;
+        int deadline;
+        int profit;
+        Job(char job_id, int deadline, int profit)
+        {
+            this.deadline = deadline;
+            this.job_id = job_id;
+            this.profit = profit;
+        }
+    }
+ 
+    static void printJobScheduling(ArrayList<Job> arr)
+    {
+        int n = arr.size();
+ 
+        // sorting the array on the
+        // basis of their deadlines
+        Collections.sort(arr, (a, b) -> {
+            return a.deadline - b.deadline;
+        });
+ 
+        // initialise the result array and maxHeap
+        ArrayList<Job> result = new ArrayList<>();
+        PriorityQueue<Job> maxHeap = new PriorityQueue<>(
+            (a, b) -> { return b.profit - a.profit; });
+ 
+        // starting the iteration from the end
+        for (int i = n - 1; i > -1; i--) {
+            int slot_available;
+           
+            // calculate slots between two deadlines
+            if (i == 0) {
+                slot_available = arr.get(i).deadline;
             }
-         }
-      }
-      // Print the sequence
-      for (char jb : job)
-      System.out.print(jb + " ");
-      System.out.println();
-   }
-   // Driver code
-   public static void main(String args[]) {
-      ArrayList<Job> arr = new ArrayList<Job>();
-      arr.add(new Job('a', 2, 100));
-      arr.add(new Job('b', 2, 20));
-      arr.add(new Job('c', 1, 40));
-      arr.add(new Job('d', 3, 35));
-      arr.add(new Job('e', 1, 25));     
-      // Function call
-      System.out.println("Following is maximum profit sequence of Jobs: ");
-      Job job = new Job();     
-      // Calling function
-      job.printJobScheduling(arr, 3);
-   }
+            else {
+                slot_available = arr.get(i).deadline
+                                 - arr.get(i - 1).deadline;
+            }
+ 
+            // include the profit of job(as priority),
+            // deadline and job_id in maxHeap
+            maxHeap.add(arr.get(i));
+ 
+            while (slot_available > 0
+                   && maxHeap.size() > 0) {
+ 
+                // get the job with max_profit
+                Job job = maxHeap.remove();
+ 
+                // reduce the slots
+                slot_available--;
+ 
+                // include the job in the result array
+                result.add(job);
+            }
+        }
+ 
+        // jobs included might be shuffled
+        // sort the result array by their deadlines
+        Collections.sort(result, (a, b) -> {
+            return a.deadline - b.deadline;
+        });
+       
+        for (Job job : result) {
+            System.out.print(job.job_id + " ");
+        }
+       
+        System.out.println();
+    }
+ 
+    // Driver's Code
+    public static void main(String[] args)
+    {
+        ArrayList<Job> arr = new ArrayList<Job>();
+ 
+        arr.add(new Job('1', 2, 20));
+        arr.add(new Job('2', 2, 60));
+        arr.add(new Job('3', 1, 40));
+        arr.add(new Job('4', 3, 100));
+        arr.add(new Job('5', 4, 80));
+       
+        System.out.println("Following is maximum "
+                           + "profit sequence of jobs");
+ 
+        // Function call
+        printJobScheduling(arr);
+        
+        Following is maximum profit sequence of jobs
+        3 2 4 5 
+    }
 }
 ```
 
